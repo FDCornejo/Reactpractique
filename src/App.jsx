@@ -5,7 +5,7 @@ function App() {
 
 
     <div>
-<h1>Este es mi Home</h1>
+<h1>Este es mi Home Hola</h1>
 
     </div>
 
