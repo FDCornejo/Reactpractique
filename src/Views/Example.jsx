@@ -1,32 +1,71 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-const getBaseUrl="http://www.colr.org/json/color/random"
+import Card from '../Components/Cards';
+const getBaseUrl = "http://api.tvmaze.com/search/shows?q=";
 
 
 export default class Example extends Component {
-  
+    state = {
+        elements: [],
+        texto: 'girls'
+    };
 
-        //state for characters value//
-        state = {
-            color : "2345"
-        };
-miFuncion(){
-    axios
-  .get(getBaseUrl)
-  .then((response) => {
-      alert(response.data.colors[0].hex)
-    this.setState({color: response.data.colors[0].hex});
-    //this.setState({name: response.data.name});
-  })
-}
+    miFuncion = () => {
+        var s = this.state.texto
+        axios
+            .get(getBaseUrl + s.split(''))
+            .then((response) => {
+                console.log(response.data)
+                this.setState({ elements: response.data })
+                this.setState({ name: response.data.name });
+            })
+    }
+
+    handleChangeSearch = (e) => {
+        this.setState({ texto: e.target.value });
+    }
+
+
     render() {
+        var item = this.state.elements.map((value, index) => {
+            return (
+                <Card key={value.show.id} info={value}></Card>
+            )
+        });
         return (
+
             <div>
-                <button  onClick={this.miFuncion}>Button </button>
-                <h1>Name</h1>
-                <h3 style={{color:"#"+this.state.color}}>{this.state.color}</h3>
+                <h1>Search a Serial</h1>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <div className="input-group mb-3">
+                                <div className="input-group-prepend">
+                                    <span className="input-group-text" id="inputGroup-sizing-lg">
+                                        <i className="material-icons">
+                                            tv</i>
+                                    </span>
+                                </div>
+                                <input onChange={this.handleChangeSearch} type="text" className="form-control" placeholder="Try with Naruto" aria-label="Username" aria-describedby="inputGroup-sizing-lg" />
+                                <button className="btn btn-primary" onClick={this.miFuncion}>
+                                    <i className="material-icons">search</i>
+                                </button>
+                            </div>
+
+                        </div>
+                   
+                    </div>
+                    <div className="row">
+                            {item}
+
+                        </div>
+                </div>
+
+
 
             </div>
         );
+
     }
-}
+
+};
